@@ -33,6 +33,6 @@ void *smemset(void *str, int c, size_t n);
 
 void sys_error(char *msg, int exit_code);
 void app_error(char *msg, int exit_code);
-void debug(char *msg,...);
+void debug(char *msg, ...);
 
 #endif /* UTILSHEADER */

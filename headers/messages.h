@@ -8,10 +8,10 @@
 #include <mqueue.h>
 #include <fcntl.h>
 
-/* TODO: DEFINE */
-#define DESCSIZE 5
-
+#define DESCSIZE 4
 #define DESCPREF "/_"
+
+#define MAXMSG 5
 
 #ifndef MESSAGESHEADER
 #define MESSAGESHEADER
@@ -24,7 +24,7 @@ struct _message {
 #define M_SIZE sizeof(struct _message)
 
 message new_message(int value, int author);
-int send_m(message m_content, int *dests);
+int send_m(message m_content, int *dests, int N);
 message receive_m(mqd_t mqdes);
 
 char *nid(int id);

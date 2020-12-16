@@ -6,13 +6,13 @@
 # Modify these to fit your project.
 
 # The name of the target executable
-TARGET  = paxos
+TARGET  = tests/L1tests
 
 # Space separated list of all source files
-SOURCES = 
+SOURCES = src/sys/l1tests.c src/memory.c src/messages.c src/sys/utils.c
 
 # Space separated directories containing source files
-INCLUDE_DIRS =
+INCLUDE_DIRS = headers
 
 # Compiler flags (e.g. optimization, links, etc.):
 CFLAGS = -O2 -g -w
@@ -30,14 +30,15 @@ INCLUDES = $(foreach dir, $(INCLUDE_DIRS), -I$(dir))
 OBJECTS = $(SOURCES:.c=.o)
 
 all: $(OBJECTS)
-	$(CC) $(CFLAGS) $(OBJECTS) -o $(TARGET) -lrt
+	$(CC) $(CFLAGS) $(INCLUDES) $(OBJECTS) -o $(TARGET) -lrt
 	make clean
 
 %.o: %.c
 	@echo "Compiling $<"
-	$(CC) -c $(CFLAGS) -o $@ $< -lrt
+	$(CC) -c $(CFLAGS) $(INCLUDES) -o $@ $< -lrt
 
 clean:
 	@echo "Cleaning"
 	rm -f *.o *.d
 	cd src && rm -f *.o
+	cd src/sys && rm -f *.o

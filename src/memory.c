@@ -2,41 +2,43 @@
  * memory.c
  ***********/
 
-#include "paxos.h"
+#include "memory.h"
 
 struct block *new_block()
 {
-  return smalloc(B_SIZE);
+  return scalloc(1, B_SIZE);
 }
 
 shared_memory new_shared_mem(int N)
 {
-  return scalloc(B_SIZE * N);
+  return scalloc(N, B_SIZE);
 }
-
-struct block *read_block(int id, shared_memory shared_block)
-{
-  struct block *data = smalloc(B_SIZE);
-  return smemcopy(data, shared_block[id], B_SIZE);
-}
-
 
 /* The following functions do not throw errors, but return -1 on
  * failed memory operations.
  */
+int read_block(struct block *container, int id, shared_memory shared_block)
+{
+  if (memcpy(container, &shared_block[id], B_SIZE) == NULL) {
+    debug("Failed to read from block %n.", id);
+    return -1;
+  } else
+    return 0;
+}
+
 int write_block(struct block *data, int id, shared_memory shared_block)
 {
-  if (memcopy(shared_block[id], data, B_SIZE) == NULL) {
+  if (memcpy(&shared_block[id], data, B_SIZE) == NULL) {
     debug("Failed to write to block %n.", id);
     return -1;
   } else
     return 0;
 }
 
-int wipe_block(int id, shared_memory shared_block)
+int wipe_block(struct block *target)
 {
-  if (memset(shared_blocks[id], 0, B_SIZE) == NULL) {
-    debug("Failed to wipe block %n.", id);
+  if (memset(target, 0, B_SIZE) == NULL) {
+    debug("Failed to wipe block.");
     return -1;
   } else
     return 0;

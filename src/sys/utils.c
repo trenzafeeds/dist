@@ -8,7 +8,7 @@
 
 int arrlen(int *arr)
 {
-  return (sizeof(arr) / sizeof(*arr))
+  return (sizeof(arr) / sizeof(*arr));
 }
 
 int getval(int index, int *arr, int flags)
@@ -40,7 +40,8 @@ void arrwipe(int *arr, int len)
 
 int dictfind(int key, int keys, int vals)
 {
-  if ((int i = getindex(key, keys)) == -1)
+  int i;
+  if ((i = getindex(key, keys)) == -1)
     return -1;
   return getval(i, vals, 0);
 }
@@ -82,28 +83,33 @@ FILE *open_file(char *fpath, char *action)
 /* Memory */
 void *smalloc(size_t n)
 {
-  if ((void *p = malloc(n)) == NULL)
+  void *p;
+  if ((p = malloc(n)) == NULL)
     sys_error("Error allocating memory block (malloc).", 1);
   return p;
 }
 
 void *scalloc(size_t nmemb, size_t size)
 {
-  if ((void *p = calloc(nmemb, size)) == NULL)
+  void *p;
+  p = calloc(nmemb, size);
+  if (p == NULL)
     sys_error("Error allocating memory block (calloc).", 1);
   return p;
 }
 
 void *smemcpy(void *dest, const void *src, size_t n)
 {
-  if ((void *p = memcpy(dest, src, n)) == NULL)
+  void *p;
+  if ((p = memcpy(dest, src, n)) == NULL)
     sys_error("Error copying between memory blocks.", 1);
   return p;
 }
 
 void *smemset(void *str, int c, size_t n)
 {
-  if ((void *p = memset(str, c, n)) == NULL)
+  void *p;
+  if ((p = memset(str, c, n)) == NULL)
     sys_error("Error wiping memory block.", 1);
   return p;
 }
@@ -111,7 +117,7 @@ void *smemset(void *str, int c, size_t n)
 /* Errors */
 void sys_error(char *msg, int exit_code)
 {
-  perror(char *msg);
+  perror(msg);
   fflush(stderr);
   if (exit_code)
     exit(exit_code);
@@ -127,13 +133,15 @@ void app_error(char *msg, int exit_code)
   return;
 }
 
-void debug(char *msg,...)
+void debug(char *msg, ...)
 {
   #ifdef DEBUG
   va_list va;
   va_start(va, msg);
-  vsprintf(stderr, msg, va);
+  vfprintf(stderr, msg, va);
+  fprintf(stderr, "\n");
   fflush(stderr);
+  va_end(va);
   #endif
   return;
 }

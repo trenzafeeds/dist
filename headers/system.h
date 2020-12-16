@@ -19,6 +19,6 @@
 #ifndef SYSHEADER
 #define SYSHEADER
 
-// #define DEBUG
+#define DEBUG
 
 #endif /* SYSHEADER */
