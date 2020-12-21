@@ -75,11 +75,40 @@ int messagetest()
   return ret;
 }
 
-int main()
+void *threadfunc(void *id)
 {
+  fflush(stdout);
+  fprintf(stdout, "Thread %i printing.\n", *(int *)id);
+  fflush(stdout);
+  return NULL;
+}
+
+int threadtest(int nodes)
+{
+  int ret;
+  int *targs = scalloc(nodes, sizeof(int));
+  for (int i = 0; i < nodes; i++)
+    targs[i] = i;
+
+  printf("Starting L1 thread test...\n");
+  pthread_t *threads = new_thread_array(nodes);
+  debug("Allocated pthread array for %i threads.", nodes);
+
+  create_threads(threads, nodes, NULL, &threadfunc, targs);
+  join_threads(threads, nodes, NULL);
+  debug("Successfully joined %i threads.", nodes);
+  free(targs);
+  free(threads);
+  return 0;
+}
+
+int main()
+ {
   int rc = 0;
+  printf("Running L1 tests...\n");
   debug("Debug messages enabled.");
   rc += memtest(5);
   rc += messagetest();
-  return rc;
+  rc += threadtest(5);
+  printf("L1 tests complete. %i tests failed.\n");
 }

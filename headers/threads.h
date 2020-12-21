@@ -9,6 +9,8 @@
 #ifndef THREADSHEADER
 #define THREADSHEADER
 
+#define MAXTHREADS 20
+
 pthread_t *new_thread_array(int n);
 int spthread_create(pthread_t *thread, const pthread_attr_t *attr,
 		    void *(*start_routine) (void *), void *arg);

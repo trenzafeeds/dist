@@ -1,4 +1,4 @@
 *~
 .tmp/
 *.o
-tests/*
+tests/L*
