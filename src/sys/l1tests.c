@@ -110,5 +110,5 @@ int main()
   rc += memtest(5);
   rc += messagetest();
   rc += threadtest(5);
-  printf("L1 tests complete. %i tests failed.\n");
+  printf("L1 tests complete. %d tests failed.\n", rc);
 }

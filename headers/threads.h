@@ -16,7 +16,7 @@ int spthread_create(pthread_t *thread, const pthread_attr_t *attr,
 		    void *(*start_routine) (void *), void *arg);
 int spthread_join(pthread_t thread, void **retval);
 int create_threads(pthread_t *thread_arr, int n, const pthread_attr_t *attr,
-		   void *(*start_routine) (void *), void *arg_arr);
+		   void *(*start_routine) (void *), int *arg_arr);
 int join_threads(pthread_t *thread_arr, int n, void **ret_arr);
 
 #endif /* THREADSHEADER */
