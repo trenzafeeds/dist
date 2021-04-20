@@ -15,7 +15,7 @@ SOURCE_FILES = sys/l1tests.c memory.c messages.c threads.c sys/utils.c
 INCLUDE_DIRS = ../headers
 
 # Compiler flags (e.g. optimization, links, etc.):
-CFLAGS = -O2 -g -w -lpthread
+CFLAGS = -O2 -g -Wall -lpthread
 
 # Compiler:
 CC = gcc
@@ -32,19 +32,14 @@ SOURCES = $(foreach file, $(SOURCE_FILES), ../src/$(file))
 # Create list of the object files
 OBJECTS = $(SOURCES:.c=.o)
 
+.PHONY: all
+
 L1: $(OBJECTS)
 	$(CC) $(CFLAGS) $(INCLUDES) $(OBJECTS) -o $(TARGET) -lrt
 
 all:
 	make L1
-	make clean
 
 %.o: %.c
 	@echo "Compiling $<"
 	$(CC) -c $(CFLAGS) $(INCLUDES) -o $@ $< -lrt
-
-clean:
-	@echo "Cleaning"
-	rm -f *.o *.d
-	cd ../src && rm -f *.o
-	cd ../src/sys && rm -f *.o

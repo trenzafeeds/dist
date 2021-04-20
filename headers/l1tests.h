@@ -12,8 +12,11 @@
 
 int memtest(int nodes);
 int messagetest();
-void *threadfunc(void *id);
+void threadfunc(void *id);
 int threadtest(int nodes);
+void thread_memfunc(void *args);
+int thread_memtest(int nodes);
+void thread_msgfunc(void *id);
 
 int main();
 

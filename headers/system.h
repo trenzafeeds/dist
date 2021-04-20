@@ -9,12 +9,17 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdarg.h>
+#include <unistd.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <errno.h>
+#include <pthread.h>
 
 /* Local Library */
 #include "utils.h"
+
+#define FIRSTID 101
+#define MAXNODES 20
 
 #ifndef SYSHEADER
 #define SYSHEADER

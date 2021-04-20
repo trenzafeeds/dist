@@ -6,25 +6,9 @@
 
 /* Arrays */
 
-int arrlen(int *arr)
+int getindex(int val, int *arr, int len)
 {
-  return (sizeof(arr) / sizeof(*arr));
-}
-
-int getval(int index, int *arr, int flags)
-/* FLAGS: FLAG1 = Returns -1 instead of range error. */
-{
-  if (index >= arrlen(arr)) {
-    if (flags & FLAG1)
-      return -1;
-    app_error("Index out of list range.", 1);
-  }
-  return arr[index];
-}
-
-int getindex(int val, int *arr)
-{
-  for (int i = 0; i < arrlen(arr); i++) {
+  for (int i = 0; i < len; i++) {
     if (arr[i] == val)
       return i;
   }
@@ -36,14 +20,6 @@ void arrwipe(int *arr, int len)
   for (int i = 0; i < len; i++)
     arr[i] = 0;
   return;
-}
-
-int dictfind(int key, int keys, int vals)
-{
-  int i;
-  if ((i = getindex(key, keys)) == -1)
-    return -1;
-  return getval(i, vals, 0);
 }
 
 /* Strings */
@@ -138,6 +114,7 @@ void debug(char *msg, ...)
   #ifdef DEBUG
   va_list va;
   va_start(va, msg);
+  fflush(stderr);
   vfprintf(stderr, msg, va);
   fprintf(stderr, "\n");
   fflush(stderr);

@@ -7,15 +7,20 @@
 #ifndef MEMORYHEADER
 #define MEMORYHEADER
 
-#define MAXNODES 5
-
 struct block {
+  int cid;
+  int id;
   int val;
-  int auth;
 };
 #define B_SIZE sizeof(struct block)
 
 typedef struct block *shared_memory;
+
+struct mem_arg {
+  int id;
+  shared_memory smem;
+};
+#define MEM_ARG_SIZE sizeof(struct mem_arg)
 
 struct block *new_block();
 shared_memory new_shared_mem(int N);

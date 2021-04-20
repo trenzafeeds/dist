@@ -14,11 +14,8 @@ enum {
       FLAG4  = 8  // b1000
 };
 
-int arrlen(int *arr);
-int getval(int index, int *arr, int flags);
-int getindex(int val, int *arr);
+int getindex(int val, int *arr, int len);
 void arrwipe(int *arr, int len);
-int dictfind(int key, int keys, int vals);
 
 int strcut(char *src, char *dest, int begin, int end);
 char *strcop(char *s);
