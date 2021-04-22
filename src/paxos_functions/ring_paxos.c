@@ -109,7 +109,7 @@ int prepare(proc_info self)
     while (RID(self->round, self->pid, self->M) < self->promised_id)
       self->round++;
     self->promised_id = RID(self->round, self->pid, self->M);
-    message prepare = new_message(MSG_PREP, RID(self->round, self->pid, self->M), \
+    message prepare = new_message(MSG_PREP,RID(self->round, self->pid, self->M),\ 
 				  NO_VAL, self->pid);
     int dest = NEXT(self->pid, self->M);
     send_m(prepare, &dest, 1);

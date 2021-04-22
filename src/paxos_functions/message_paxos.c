@@ -101,7 +101,6 @@ int prepare(proc_info self)
     self->round++;
   }
   
-
   //self->round++;
   self->promised_id = RID(self->round, self->pid, self->M);
   message prepare = new_message(MSG_PREP, RID(self->round, self->pid, self->M),\

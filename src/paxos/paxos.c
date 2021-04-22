@@ -8,7 +8,7 @@ int paxos(proc_info self)
 {
   int m_type;
   if ((m_type = communicate(self))) {
-    self->timeout = 0;
+    //self->timeout = 0;
     switch(m_type) {
     case MSG_PREP:
       debug("Thread %d received PREP", self->pid);

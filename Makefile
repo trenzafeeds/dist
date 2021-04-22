@@ -14,15 +14,19 @@ all:
 	@make clean
 
 messages:
+	@make clean
 	@cd bin && make messages
 
 ring:
+	@make clean
 	@cd bin && make ring
 
 memory:
+	@make clean
 	@cd bin && make memory
 
 tests:
+	@make clean
 	@cd tests && make all
 
 clean:

@@ -25,6 +25,7 @@ int send_m(message m_content, int *dests, int N)
     mqd_t target;
     if ((target = open_queue(path, O_WRONLY | O_NONBLOCK)) != -1) {
       if ((ret = mq_send(target, (char *) m_content, M_SIZE, prio)) == -1) {
+	debug("Message send failed.");
 	//sys_error("Error at mq_send", 1);
       }
       close_queue(target);
