@@ -48,7 +48,7 @@ struct _proc_info {
   
   shared_memory smem;
 };
-#define PROC_INFO_SIZE sizeof(struct _proc_info);
+#define PROC_INFO_SIZE sizeof(struct _proc_info)
 #endif
 
 struct block *new_block();

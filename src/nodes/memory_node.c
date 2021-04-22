@@ -17,12 +17,12 @@ void node(struct args *argstruct)
 
   debug("thread %d starting wait", myinfo->pid);
   pthread_barrier_wait(&bar);
-  debug("therad %d back from wait", myinfo-pid);
+  debug("therad %d back from wait", myinfo->pid);
 
-  while ((ret = paxos(minfo)) == -1)
+  while ((ret = paxos(myinfo)) == -1)
     sleep(1);
 
-  debug("Thread %d decided on %d as leader.", minfo-pid, ret);
+  debug("Thread %d decided on %d as leader.", myinfo->pid, ret);
   free(myinfo);
   return;
 }

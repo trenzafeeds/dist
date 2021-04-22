@@ -7,12 +7,13 @@
 
 int communicate(proc_info self)
 {
-  if ((self->cid == 0) || (self->role == ACCEPT))
+  if ((self->cid == 0) || (self->role == ACCEPT)\
+      || (self->cid < self->highest_seen))
     return 0;
   struct block *read = scalloc(1, B_SIZE);
   for (int i; i < self->M; i++) {
     if (i != IND(self->pid)) {
-      read_block(self->read, i, self->smem);
+      read_block(read, i, self->smem);
       if (read->cid > self->cid) {
 	self->highest_seen = read->cid;
 	free(read);
@@ -32,6 +33,21 @@ int communicate(proc_info self)
   } else {
     return MSG_END;
   }
+}
+
+int acc_prep(proc_info self)
+{
+  return 1;
+}
+
+int accept(proc_info self)
+{
+  return 1;
+}
+
+int count_acc(proc_info self)
+{
+  return 1;
 }
 
 int acc_prom(proc_info self)
@@ -54,7 +70,7 @@ int prepare(proc_info self)
   return 0;
 }
 
-int propose(prop_info self)
+int propose(proc_info self)
 {
   self->role = PROPOSE;
   self->accepted_id = self->cid;
@@ -68,5 +84,20 @@ int propose(prop_info self)
   write->val = self->accepted_val;
   write_block(write, IND(self->pid), self->smem);
   free(write);
+  return 0;
+}
+
+int leader_count(proc_info self)
+{
+  return 1;
+}
+
+int fail(proc_info self)
+{
+  srandom(random());
+  if ((random() % 23) == 0) {
+    debug("Thread %d failed!", self->pid);
+    sleep(4);
+  }
   return 0;
 }
