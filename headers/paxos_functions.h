@@ -32,8 +32,6 @@
 
 typedef struct _proc_info *proc_info;
 
-char *type_to_name(int type);
-
 int communicate(proc_info self);
 
 int acc_prep(proc_info self);

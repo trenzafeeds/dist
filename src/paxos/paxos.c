@@ -45,7 +45,7 @@ int paxos(proc_info self)
     if (self->role == ACCEPT) {
       if (timeout == 0)
 	timeout = time(0);
-      else if ((time(0) - timeout) > 2)
+      else if ((time(0) - timeout) > TIMEOUT)
 	self->role = PREPARE;
     }
     else {

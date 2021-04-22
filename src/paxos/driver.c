@@ -4,6 +4,7 @@
 
 #include "driver.h"
 #define TESTNODES 5
+//#define MEMORY -- Should be defined by Makefile
 
 pthread_barrier_t bar;
 
@@ -27,6 +28,10 @@ int main(int argc, char *argv[])
   }
   debug("starting with %d nodes", nodes);
 
+  #ifdef MEMORY
+  shared_memory shared_mem = scalloc(nodes, B_SIZE);
+  #endif
+
   struct args *targs = scalloc(nodes, ARGSIZE);
   void *pass[nodes];
   pthread_t *thread_array = new_thread_array(nodes);
@@ -34,6 +39,9 @@ int main(int argc, char *argv[])
   for (int i = 0; i < nodes; i++) {
     targs[i].id = FIRSTID + i;
     targs[i].nodecount = nodes;
+    #ifdef MEMORY
+    targs[i].extra = (void *) shared_mem;
+    #endif
     pass[i] = &targs[i];
   }
   debug("Here");

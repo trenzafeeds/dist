@@ -5,7 +5,7 @@
 #
 ######################################
 
-.PHONY: clean tests messages ring all
+.PHONY: clean tests messages ring memory all
 
 all:
 	@make messages
@@ -18,6 +18,9 @@ messages:
 
 ring:
 	@cd bin && make ring
+
+memory:
+	@cd bin && make memory
 
 tests:
 	@cd tests && make all

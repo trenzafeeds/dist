@@ -11,6 +11,8 @@
 #ifndef MESSAGESHEADER
 #define MESSAGESHEADER
 
+#define TIMEOUT 2
+
 #define DESCSIZE 4
 #define DESCPREF "/_"
 
