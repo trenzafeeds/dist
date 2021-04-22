@@ -13,6 +13,7 @@ void node(struct args *argstruct)
   proc_info myinfo = scalloc(1, PROC_INFO_SIZE);
   myinfo->pid = argstruct->id;
   myinfo->M = argstruct->nodecount;
+  myinfo->highest_seen = 1;
   myinfo->smem = (shared_memory) argstruct->extra;
 
   debug("thread %d starting wait", myinfo->pid);

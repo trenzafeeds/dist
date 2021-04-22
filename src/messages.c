@@ -17,14 +17,21 @@ message new_message(int type, int id, int value, int auth)
 int send_m(message m_content, int *dests, int N)
 {
   int ret = 0;
+  int prio;
+  if ((m_content->type == 4) || (m_content->type==5)) prio = 1;
+  else prio = 0;
   for (int i = 0; i < N; i++) {
     char *path = nid(dests[i]);
-    mqd_t target = open_queue(path, O_WRONLY);
-    free(path);
-    if ((ret = mq_send(target, (char *) m_content, M_SIZE, rand() % 5)) == -1) {
-      sys_error("Error at mq_send", 1);
+    mqd_t target;
+    if ((target = open_queue(path, O_WRONLY | O_NONBLOCK)) != -1) {
+      if ((ret = mq_send(target, (char *) m_content, M_SIZE, prio)) == -1) {
+	//sys_error("Error at mq_send", 1);
+      }
+      close_queue(target);
+    } else {
+      ret = ret - 1;
     }
-    close_queue(target);
+    free(path);
   }
   free(m_content);
   return ret;
@@ -78,7 +85,7 @@ mqd_t open_queue(char *desc, int permissions)
 {
   mqd_t mq_des;
   if ((mq_des = mq_open(desc, permissions)) == -1)
-    sys_error("Error at mq_open", 1);
+    return -1;
   return mq_des;
 }
 

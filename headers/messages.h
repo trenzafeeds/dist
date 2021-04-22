@@ -49,7 +49,8 @@ struct _proc_info {
 
   /* leader */
   int leader_count;
-  
+
+  int timeout;
   mqd_t listen;
   message new_m;
 };

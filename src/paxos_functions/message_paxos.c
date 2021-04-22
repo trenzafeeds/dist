@@ -94,12 +94,20 @@ int prepare(proc_info self)
 {
   self->role = PREPARE;
   self->count = 0;
-  while (RID(self->round, self->pid, self->M) < self->promised_id)
+  
+  while (RID(self->round, self->pid, self->M) < self->promised_id) {
+    debug("Thread %d %d INC %d towards %d", self->pid, self->round, \
+	  RID(self->round, self->pid, self->M), self->promised_id);
     self->round++;
+  }
+  
+
+  //self->round++;
   self->promised_id = RID(self->round, self->pid, self->M);
   message prepare = new_message(MSG_PREP, RID(self->round, self->pid, self->M),\
 				NO_VAL, self->pid);
   send_all(prepare, self->pid, FIRSTID, self->M);
+  debug("Thread %d sent PREPARE", self->pid);
   return 0;
 }
 

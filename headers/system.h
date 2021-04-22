@@ -19,7 +19,7 @@
 #include "utils.h"
 
 #define FIRSTID 101
-#define MAXNODES 20
+#define MAXNODES 8
 
 #ifndef SYSHEADER
 #define SYSHEADER

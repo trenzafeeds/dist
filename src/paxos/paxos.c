@@ -6,10 +6,9 @@
 
 int paxos(proc_info self)
 {
-  time_t timeout = 0;
   int m_type;
   if ((m_type = communicate(self))) {
-    timeout = 0;
+    self->timeout = 0;
     switch(m_type) {
     case MSG_PREP:
       debug("Thread %d received PREP", self->pid);
@@ -18,6 +17,7 @@ int paxos(proc_info self)
     case MSG_PROP:
       debug("Thread %d received PROP", self->pid);
       accept(self);
+      debug("%d FINISHED ACCEPT", self->pid);
       break;
     case MSG_ACC:
       debug("Thread %d received ACC", self->pid);
@@ -42,13 +42,17 @@ int paxos(proc_info self)
       }
     }
   } else {
+    /*
     if (self->role == ACCEPT) {
-      if (timeout == 0)
-	timeout = time(0);
-      else if ((time(0) - timeout) > TIMEOUT)
+      self->timeout++;
+      if (self->timeout > self->M) {
+	debug("TIMEOUT");
+	self->timeout = 0;
 	self->role = PREPARE;
+      }
     }
-    else {
+    */
+    if (self->role != ACCEPT) {
       debug("Thread %d sending PREPARE", self->pid);
       prepare(self);
     }

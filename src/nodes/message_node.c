@@ -13,6 +13,7 @@ void node(struct args *argstruct)
   proc_info myinfo = scalloc(1, PROC_INFO_SIZE);
   myinfo->pid = argstruct->id;
   myinfo->M = argstruct->nodecount;
+  myinfo->timeout = 0;
   char *myq = nid(argstruct->id);
   myinfo->listen = init_queue(myq, O_NONBLOCK, MAXMSG, M_SIZE);
   int cleared = clear_queue(myinfo->listen);

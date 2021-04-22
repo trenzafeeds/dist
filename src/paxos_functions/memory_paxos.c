@@ -7,18 +7,24 @@
 
 int communicate(proc_info self)
 {
-  if ((self->cid == 0) || (self->role == ACCEPT)\
-      || (self->cid < self->highest_seen))
+  if (self->role == ACCEPT) {
+    sleep(IND(self->pid) % (self->M / 2 + 1));
+    self->role = PREPARE;
+    debug("SET PREPARE");
+    return 0;
+  } else if (self->cid < self->highest_seen)
     return 0;
   struct block *read = scalloc(1, B_SIZE);
   for (int i; i < self->M; i++) {
     if (i != IND(self->pid)) {
       read_block(read, i, self->smem);
       if (read->cid > self->cid) {
-	self->highest_seen = read->cid;
-	free(read);
-	self->role = ACCEPT;
-	return 0;
+	if (!((self->role == PROPOSE) && (read->val == self->accepted_val))) {
+	  self->highest_seen = read->cid;
+	  free(read);
+	  self->role = ACCEPT;
+	  return 0;
+	}
       }
       else if ((read->id >= self->highest_old_id) && (self->role == PREPARE)) {
 	self->highest_old_id = read->id;
