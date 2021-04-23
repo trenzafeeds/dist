@@ -1,6 +1,11 @@
-/***************
+/***************************
  * messages.c
- ***************/
+ *
+ * Functions managing
+ * message-passing between
+ * threads using POSIX
+ * message queues.
+ ***************************/
 
 #include "messages.h"
 
@@ -25,8 +30,7 @@ int send_m(message m_content, int *dests, int N)
     mqd_t target;
     if ((target = open_queue(path, O_WRONLY | O_NONBLOCK)) != -1) {
       if ((ret = mq_send(target, (char *) m_content, M_SIZE, prio)) == -1) {
-	debug("Message send failed.");
-	//sys_error("Error at mq_send", 1);
+	debug("Message send failed.\n");
       }
       close_queue(target);
     } else {
@@ -61,6 +65,11 @@ message receive_m(mqd_t mqdes)
   return m_content;
 }
 
+/* Threads passing messages refer to eachother by an
+ * integer id number only. The function below
+ * converts id numbers into strings representing
+ * POSIX message queues.
+ */
 char *nid(int id)
 {
   char *desc = smalloc(sizeof(char) * DESCSIZE);

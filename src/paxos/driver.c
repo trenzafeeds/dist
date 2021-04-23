@@ -1,6 +1,13 @@
-/*************
+/******************************************
  * driver.c
- *************/
+ *
+ * Unified driver program.
+ * This functions as the top
+ * level program for ALL implementations.
+ * Uses a different definition of the node
+ * function passed to each thread
+ * according to implementation.
+ ******************************************/
 
 #include "driver.h"
 #define TESTNODES 5
@@ -18,7 +25,7 @@ int main(int argc, char *argv[])
   else {
     nodes = atoi(argv[1]);
     if (nodes > MAXNODES) {
-      printf("Error: MAXNODES is currently %d. Recompile with larger MAXNODES.",\
+      printf("Error: MAXNODES is %d. This is restricted by POSIX message queue limits and cannot be changed.\n",\
              MAXNODES);
       exit(1);
     } else if (nodes < 5) {
@@ -26,7 +33,7 @@ int main(int argc, char *argv[])
       exit(1);
     }
   }
-  debug("starting with %d nodes", nodes);
+  debug("Starting with %d nodes.\n", nodes);
 
   #ifdef MEMORY
   shared_memory shared_mem = scalloc(nodes, B_SIZE);
@@ -44,11 +51,9 @@ int main(int argc, char *argv[])
     #endif
     pass[i] = &targs[i];
   }
-  debug("Here");
   create_threads(thread_array, nodes, NULL, &node, pass);
   sleep(1);
   pthread_cond_broadcast(&setup);
-  debug("About to join");
   join_threads(thread_array, nodes, NULL);
   free(targs);
   free(thread_array);

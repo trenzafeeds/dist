@@ -1,6 +1,12 @@
-/************
+/***************************
  * threads.c
- ************/
+ *
+ * Functions managing the
+ * creating and joining of
+ * pthreads. To be used
+ * by the top-level driver
+ * program.
+ ***************************/
 
 #include "threads.h"
 
@@ -31,21 +37,19 @@ int create_threads(pthread_t *thread_arr, int n, const pthread_attr_t *attr,
 {
   for (int i = 0; i < n; i++) {
     spthread_create(&thread_arr[i], attr, start_routine, arg_arr[i]);
-    debug("created thread %d", i);
   }
   return 0;
 }
 
 int join_threads(pthread_t *thread_arr, int n, void **ret_arr)
 {
-  debug("Starting join");
   for (int i = 0; i < n; i++) {
     if (ret_arr != NULL)
       spthread_join(thread_arr[i], ret_arr[i]);
     else {
-      debug("Attempting to join %d", i);
+      //debug("Driver attempting to join thread %d\n", i);
       spthread_join(thread_arr[i], NULL);
-      debug("Joined %d", i);
+      //debug("Driver joined thread %d\n", i);
     }
   }
   return 0;

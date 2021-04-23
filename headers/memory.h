@@ -12,6 +12,12 @@
 #define TIMEOUT 1
 #endif
 
+/* Processes refer to eachother
+ * by id number only. The following
+ * macro converts an id number to 
+ * the corresponding index of a block
+ * in shared memory.
+ */
 #define IND(i) (i - FIRSTID)
 
 struct block {
@@ -29,6 +35,16 @@ struct mem_arg {
 };
 #define MEM_ARG_SIZE sizeof(struct mem_arg)
 
+/* Individual threads must store different
+ * local information depending on whether
+ * they communicate using messages or shared
+ * memory. The struct _proc_info below is defined
+ * once here, and another time (differently) in
+ * memory.h, with the correct definition included
+ * as needed.
+ * The #ifdef wrapper is included as an extra
+ * precaution to avoid redefinition.
+ */
 #ifdef MEMORY
 typedef struct _proc_info *proc_info;
 struct _proc_info {

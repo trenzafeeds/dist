@@ -1,6 +1,9 @@
-/************
+/*****************************
  * utils.c
- ************/
+ * 
+ * General utility functions
+ * and safety wrappers.
+ *****************************/
 
 #include "system.h"
 
@@ -116,7 +119,6 @@ void debug(char *msg, ...)
   va_start(va, msg);
   fflush(stderr);
   vfprintf(stderr, msg, va);
-  fprintf(stderr, "\n");
   fflush(stderr);
   va_end(va);
   #endif

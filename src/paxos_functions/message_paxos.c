@@ -1,6 +1,9 @@
-/********************
+/********************************
  * message_paxos.c
- ********************/
+ * 
+ * Implementation of distributed
+ * message-passing Paxos.
+ ********************************/
 
 #include "paxos_functions.h"
 #include "messages.h"
@@ -96,17 +99,14 @@ int prepare(proc_info self)
   self->count = 0;
   
   while (RID(self->round, self->pid, self->M) < self->promised_id) {
-    debug("Thread %d %d INC %d towards %d", self->pid, self->round, \
-	  RID(self->round, self->pid, self->M), self->promised_id);
     self->round++;
   }
   
-  //self->round++;
   self->promised_id = RID(self->round, self->pid, self->M);
   message prepare = new_message(MSG_PREP, RID(self->round, self->pid, self->M),\
 				NO_VAL, self->pid);
   send_all(prepare, self->pid, FIRSTID, self->M);
-  debug("Thread %d sent PREPARE", self->pid);
+  debug("Thread %d sent PREPARE\n", self->pid);
   return 0;
 }
 
@@ -122,6 +122,7 @@ int propose(proc_info self)
   message proposal = new_message(MSG_PROP, self->promised_id, self->proposed_val,\
 				 self->pid);
   send_all(proposal, self->pid, FIRSTID, self->M);
+  debug("Thread %d sent PROPOSE\n", self->pid);
   return 0;
 }
 
@@ -130,7 +131,7 @@ int leader_count(proc_info self)
   free(self->new_m);
   self->leader_count++;
   if (self->leader_count > self->M/2) {
-    debug("Thread %d: I AM LEADER. Commanding end.", self->pid);
+    debug("Thread %d: I AM LEADER. Commanding end.\n", self->pid);
     message end = new_message(MSG_END, 0, 0, self->pid);
     send_all(end, self->pid, FIRSTID, self->M);
     return 1;
@@ -142,7 +143,7 @@ int fail(proc_info self)
 {
   srandom(random());
   if ((random() % 23) == 0) {
-    debug("Thread %d failed!", self->pid);
+    debug("Thread %d failed!\n", self->pid);
     sleep(4);
   }
   return 0;

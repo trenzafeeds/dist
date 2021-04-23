@@ -10,6 +10,7 @@
 all:
 	@make messages
 	@make ring
+	@make memory
 	@make tests
 	@make clean
 

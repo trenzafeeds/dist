@@ -1,10 +1,17 @@
-/****************
+/**********************************
  * ring_paxos.c
- ****************/
+ *
+ * Implementation of parallel
+ * message-passing Paxos in a ring
+ * structured network.
+ **********************************/
 
 #include "paxos_functions.h"
 #include "messages.h"
 
+/* The following macro calculates the id of the
+ * next process in the ring, for addressing purposes.
+ */
 #define NEXT(id, M) (((id - FIRSTID + 1) % M) + FIRSTID)
 
 int communicate(proc_info self)
@@ -38,8 +45,6 @@ int acc_prep(proc_info self)
 int accept(proc_info self)
 {
   message current = self->new_m;
-  if (current->type == MSG_PROP)
-    debug("Thread %d accepting proposal of %d", self->pid, current->auth);
   if (current->id >= self->promised_id) {
     self->role = ACCEPT;
     self->promised_id = current->id;
@@ -67,7 +72,6 @@ int count_acc(proc_info self)
       send_m(teach, &dest, 1);
       free(current);
     } else {
-      debug("Thread %d in state %d", self->pid, self->role);
       accept(self);
     }
   } else {
@@ -113,6 +117,7 @@ int prepare(proc_info self)
 				  NO_VAL, self->pid);
     int dest = NEXT(self->pid, self->M);
     send_m(prepare, &dest, 1);
+    debug("Thread %d sent PREPARE.\n", self->pid);
   }
   return 0;
 }
@@ -129,6 +134,7 @@ int propose(proc_info self)
 				 self->pid);
   int dest = NEXT(self->pid, self->M);
   send_m(proposal, &dest, 1);
+  debug("Thread %d sent PROPOSE.\n", self->pid);
   return 0;
 }
 
@@ -151,7 +157,7 @@ int fail(proc_info self)
 {
   srandom(random());
   if ((random() % 23) == 0) {
-    debug("Thread %d failed!", self->pid);
+    debug("Thread %d failed!\n", self->pid);
     sleep(4);
   }
   return 0;

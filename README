@@ -1,3 +1,7 @@
-# Distributed Computing
+### Setup instructions
 
-Distributed algorithms exhibited across different formats
+To compile all executables, simply execute
+`$ make all` in the home directory. This creates
+three binaries in the `bin/` directory, one for
+each demonstration of Paxos, as well as a testing
+program in `tests/`.

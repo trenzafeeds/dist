@@ -1,6 +1,12 @@
-/********************
+/*********************************
  * message_node.c
- ********************/
+ *
+ * Routine run by each thread
+ * in the distributed
+ * message-passing AND parallel
+ * message-passing (ring)
+ * implementations.
+ *********************************/
 
 #include "node.h"
 #include "messages.h"
@@ -17,16 +23,15 @@ void node(struct args *argstruct)
   char *myq = nid(argstruct->id);
   myinfo->listen = init_queue(myq, O_NONBLOCK, MAXMSG, M_SIZE);
   int cleared = clear_queue(myinfo->listen);
-  debug("Thread %d cleared %d messages.", myinfo->pid, cleared);
 
-  debug("thread %d starting wait", myinfo->pid);
+  debug("Thread %d starting wait.\n", myinfo->pid);
   pthread_barrier_wait(&bar);
-  debug("thread %d back from wait", myinfo->pid);
+  debug("Thread %d back from wait.\n", myinfo->pid);
   
   while ((ret = paxos(myinfo)) == -1)
     sleep(1);
 
-  debug("Thread %d decided on %d as leader.", myinfo->pid, ret);
+  debug("Thread %d decided on %d as leader.\n", myinfo->pid, ret);
   close_queue(myinfo->listen);
   mq_unlink(myq);
   free(myinfo);

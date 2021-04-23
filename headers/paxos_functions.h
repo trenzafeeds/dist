@@ -1,6 +1,13 @@
-/********************
+/*************************************
  * paxos_functions.h
- ********************/
+ *
+ * A unified header file for
+ * each implementation of Paxos.
+ * Though each implementation works
+ * differently, they all define
+ * exactly the same functions, found
+ * in this header file.
+ *************************************/
 
 #include "system.h"
 
@@ -18,6 +25,13 @@
 /* Promise (or denial) */
 #define MSG_PROM 6
 
+/* In Paxos, the sequence of
+ * ballot numbers must be unique to
+ * each process. The macro below
+ * transforms the generic round 
+ * number into a unique ballot 
+ * number based on the process id.
+ */
 #define RID(r, i, M) (i + (r*M))
 
 /* Roles */

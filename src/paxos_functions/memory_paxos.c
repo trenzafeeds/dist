@@ -1,6 +1,10 @@
-/******************
+/*****************************
  * memory_paxos.c
- ******************/
+ *
+ * Implementation of parallel
+ * Paxos on shared memory
+ * (Disk Paxos).
+ *****************************/
 
 #include "paxos_functions.h"
 #include "memory.h"
@@ -10,7 +14,6 @@ int communicate(proc_info self)
   if (self->role == ACCEPT) {
     sleep(IND(self->pid) % (self->M / 2 + 1));
     self->role = PREPARE;
-    debug("SET PREPARE");
     return 0;
   } else if (self->cid < self->highest_seen)
     return 0;
@@ -23,6 +26,7 @@ int communicate(proc_info self)
 	  self->highest_seen = read->cid;
 	  free(read);
 	  self->role = ACCEPT;
+	  debug("Thread %d entered ACCEPT state.\n", self->pid);
 	  return 0;
 	}
       }
@@ -73,6 +77,7 @@ int prepare(proc_info self)
   write->cid = self->cid;
   write_block(write, IND(self->pid), self->smem);
   free(write);
+  debug("Thread %d entered PREPARE state.\n", self->pid);
   return 0;
 }
 
@@ -90,6 +95,7 @@ int propose(proc_info self)
   write->val = self->accepted_val;
   write_block(write, IND(self->pid), self->smem);
   free(write);
+  debug("Thread %d entered PROPOSE state.\n", self->pid);
   return 0;
 }
 
@@ -102,7 +108,7 @@ int fail(proc_info self)
 {
   srandom(random());
   if ((random() % 23) == 0) {
-    debug("Thread %d failed!", self->pid);
+    debug("Thread %d failed!\n", self->pid);
     sleep(4);
   }
   return 0;

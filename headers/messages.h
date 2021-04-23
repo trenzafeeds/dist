@@ -27,6 +27,14 @@ struct _message {
 };
 #define M_SIZE sizeof(struct _message)
 
+/* Individual threads must store different
+ * local information depending on whether
+ * they communicate using messages or shared
+ * memory. The struct _proc_info below is defined
+ * once here, and another time (differently) in
+ * memory.h, with the correct definition included
+ * as needed.
+ */
 struct _proc_info {
   int pid;
   int round;
